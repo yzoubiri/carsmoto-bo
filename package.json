@@ -1,7 +1,7 @@
 {
   "name": "carsmoto-bo",
   "version": "1.0.0",
-  "description": "API REST pour gérer une liste de voitures (back-office Node.js LTS 22)",
+  "description": "API REST pour gérer une liste de voitures (Node.js LTS 22)",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -14,7 +14,7 @@
     "express",
     "api",
     "voitures",
-    "back-office"
+    "azure"
   ],
   "author": "Younes Zoubiri",
   "license": "MIT",
