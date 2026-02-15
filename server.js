@@ -11,8 +11,8 @@ app.use(cors({
 app.use(express.json());
 
 let voitures = [
-  { id: 1, marque: "Ferrari", modele: "488 GTB", annee: 2020, image: "https://via.placeholder.com/150?text=Ferrari" },
-  { id: 2, marque: "Lamborghini", modele: "Huracán EVO", annee: 2021, image: "https://via.placeholder.com/150?text=Lambo" }
+  { id: 1, marque: "Ferrari", modele: "488 GTB", annee: 2020, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/2015-03-03_Geneva_Motor_Show_3908.JPG/1280px-2015-03-03_Geneva_Motor_Show_3908.JPG" },
+  { id: 2, marque: "Lamborghini", modele: "Huracán EVO", annee: 2021, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/2014-03-04_Geneva_Motor_Show_1377.JPG/1280px-2014-03-04_Geneva_Motor_Show_1377.JPG" }
 ];
 
 // GET toutes les voitures
