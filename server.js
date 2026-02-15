@@ -1,13 +1,17 @@
 // server.js
 import express from "express";
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware JSON
+// Autoriser uniquement ton front Azure Static Web Apps
+app.use(cors({
+  origin: "https://lemon-beach-0d0918603.6.azurestaticapps.net"
+}));
+
 app.use(express.json());
 
-// Exemple de données (mock)
 const voitures = [
   { id: 1, marque: "Ferrari", modele: "488 GTB", annee: 2020 },
   { id: 2, marque: "Lamborghini", modele: "Huracán EVO", annee: 2021 },
@@ -16,12 +20,10 @@ const voitures = [
   { id: 5, marque: "Mercedes", modele: "AMG GT", annee: 2021 }
 ];
 
-// Route GET pour récupérer toutes les voitures
 app.get("/api/voitures", (req, res) => {
   res.json(voitures);
 });
 
-// Route GET pour récupérer une voiture par ID
 app.get("/api/voitures/:id", (req, res) => {
   const voiture = voitures.find(v => v.id === parseInt(req.params.id));
   if (!voiture) {
