@@ -2,7 +2,7 @@
 import express from "express";
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware JSON
 app.use(express.json());
@@ -28,19 +28,6 @@ app.get("/api/voitures/:id", (req, res) => {
     return res.status(404).json({ message: "Voiture non trouvée" });
   }
   res.json(voiture);
-});
-
-// Route POST pour ajouter une voiture
-app.post("/api/voitures", (req, res) => {
-  const { marque, modele, annee } = req.body;
-  const nouvelleVoiture = {
-    id: voitures.length + 1,
-    marque,
-    modele,
-    annee
-  };
-  voitures.push(nouvelleVoiture);
-  res.status(201).json(nouvelleVoiture);
 });
 
 app.listen(PORT, () => {
