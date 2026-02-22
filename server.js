@@ -16,80 +16,31 @@ app.use(cors({
 app.use(express.json());
 
 
-// ================== ⏳ TIME SLEEP 3 SECONDES ==================
-app.use("/api", async (req, res, next) => {
-  await new Promise(resolve => setTimeout(resolve, 3000));
-  next();
-});
-// ===============================================================
+// =====================================================
+// 🔥 SIMULATION : 3 SECONDES PUIS 404 POUR TOUT /api
+// =====================================================
+app.use("/api", async (req, res) => {
 
+  const delay = 3000;
 
-// Route config
-app.get("/api/config", (req, res) => {
-  res.json({
-    message: "Simulation récupération variable d'environnement",
-    BDD_URL: BDD_URL
+  console.log(`⏳ Requête reçue : ${req.method} ${req.originalUrl}`);
+  console.log(`⌛ Attente de ${delay}ms...`);
+
+  await new Promise(resolve => setTimeout(resolve, delay));
+
+  console.log("❌ Retour 404 simulé");
+
+  return res.status(404).json({
+    error: "Not Found",
+    message: "Ressource non trouvée (simulation)",
+    path: req.originalUrl,
+    timestamp: new Date()
   });
+
 });
 
 
-// ================== ROUTES EXISTANTES ==================
-
-let voitures = [
-  { id: 1, marque: "Ferrari", modele: "488 GTB", annee: 2020, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/2015-03-03_Geneva_Motor_Show_3908.JPG/1280px-2015-03-03_Geneva_Motor_Show_3908.JPG" },
-  { id: 2, marque: "Lamborghini", modele: "Huracán EVO", annee: 2021, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/2014-03-04_Geneva_Motor_Show_1377.JPG/1280px-2014-03-04_Geneva_Motor_Show_1377.JPG" }
-];
-
-// GET
-app.get("/api/voitures", (req, res) => {
-  res.json(voitures);
-});
-
-// POST
-app.post("/api/voitures", (req, res) => {
-  const { marque, modele, annee, image } = req.body;
-
-  if (!marque || !modele || !annee || !image) {
-    return res.status(400).json({ message: "Champs manquants" });
-  }
-
-  const nouvelleVoiture = {
-    id: voitures.length ? voitures[voitures.length - 1].id + 1 : 1,
-    marque,
-    modele,
-    annee,
-    image
-  };
-
-  voitures.push(nouvelleVoiture);
-  res.status(201).json(nouvelleVoiture);
-});
-
-// PUT
-app.put("/api/voitures/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  const voiture = voitures.find(v => v.id === id);
-  if (!voiture) return res.status(404).json({ message: "Voiture non trouvée" });
-
-  const { marque, modele, annee, image } = req.body;
-
-  if (marque) voiture.marque = marque;
-  if (modele) voiture.modele = modele;
-  if (annee) voiture.annee = annee;
-  if (image) voiture.image = image;
-
-  res.json({ message: "Voiture mise à jour", voiture });
-});
-
-// DELETE
-app.delete("/api/voitures/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  const index = voitures.findIndex(v => v.id === id);
-  if (index === -1) return res.status(404).json({ message: "Voiture non trouvée" });
-
-  const supprimée = voitures.splice(index, 1);
-  res.json({ message: "Voiture supprimée", voiture: supprimée[0] });
-});
+// =====================================================
 
 app.listen(PORT, () => {
   console.log(`🚀 API démarrée sur http://localhost:${PORT}`);
