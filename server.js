@@ -1,4 +1,3 @@
-// server.js
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -8,7 +7,6 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 🔥 On récupère la variable d'environnement
 const BDD_URL = process.env.BDD_URL || "BDD_URL non définie";
 
 app.use(cors({
@@ -17,15 +15,23 @@ app.use(cors({
 
 app.use(express.json());
 
-// ================== SIMULATION BDD ==================
 
-// Route pour afficher la variable d'environnement
+// ================== ⏳ TIME SLEEP 3 SECONDES ==================
+app.use("/api", async (req, res, next) => {
+  await new Promise(resolve => setTimeout(resolve, 3000));
+  next();
+});
+// ===============================================================
+
+
+// Route config
 app.get("/api/config", (req, res) => {
   res.json({
     message: "Simulation récupération variable d'environnement",
     BDD_URL: BDD_URL
   });
 });
+
 
 // ================== ROUTES EXISTANTES ==================
 
@@ -34,12 +40,15 @@ let voitures = [
   { id: 2, marque: "Lamborghini", modele: "Huracán EVO", annee: 2021, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/2014-03-04_Geneva_Motor_Show_1377.JPG/1280px-2014-03-04_Geneva_Motor_Show_1377.JPG" }
 ];
 
-// GET toutes les voitures
-app.get("/api/voitures", (req, res) => res.json(voitures));
+// GET
+app.get("/api/voitures", (req, res) => {
+  res.json(voitures);
+});
 
-// POST ajouter une voiture
+// POST
 app.post("/api/voitures", (req, res) => {
   const { marque, modele, annee, image } = req.body;
+
   if (!marque || !modele || !annee || !image) {
     return res.status(400).json({ message: "Champs manquants" });
   }
@@ -56,7 +65,7 @@ app.post("/api/voitures", (req, res) => {
   res.status(201).json(nouvelleVoiture);
 });
 
-// PUT modifier
+// PUT
 app.put("/api/voitures/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const voiture = voitures.find(v => v.id === id);
@@ -72,7 +81,7 @@ app.put("/api/voitures/:id", (req, res) => {
   res.json({ message: "Voiture mise à jour", voiture });
 });
 
-// DELETE supprimer
+// DELETE
 app.delete("/api/voitures/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const index = voitures.findIndex(v => v.id === id);
